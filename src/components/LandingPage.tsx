@@ -49,7 +49,7 @@ const LandingPage = () => {
       >
         {/* Micro text above */}
         <motion.p
-          className="text-muted-foreground text-xs tracking-[0.4em] uppercase mb-16 font-sans"
+          className="text-muted-foreground text-xs tracking-[0.4em] uppercase mb-6 md:mb-8 font-sans"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.5 }}
@@ -68,15 +68,15 @@ const LandingPage = () => {
 
         {/* Headlines */}
         <motion.div
-          className="mt-16 mb-20"
+          className="mt-6 md:mt-10 mb-8 md:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.8 }}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground mb-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground mb-2 tracking-tight">
             Justice is waiting.
           </h1>
-          <p className="text-2xl md:text-3xl lg:text-4xl font-serif text-primary">
+          <p className="text-xl md:text-2xl lg:text-3xl font-serif text-primary">
             Time is not.
           </p>
         </motion.div>
