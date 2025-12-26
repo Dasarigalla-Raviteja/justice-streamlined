@@ -2,12 +2,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import IdleClock from "./IdleClock";
 import TransitionOverlay from "./TransitionOverlay";
-import DashboardApp from "./DashboardApp";
+import LoginGate from "./LoginGate";
 
 const LandingPage = () => {
   const [isLaunching, setIsLaunching] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
+  const [showLoginGate, setShowLoginGate] = useState(false);
 
   const handleLaunch = () => {
     setIsLaunching(true);
@@ -17,14 +17,14 @@ const LandingPage = () => {
       setShowTransition(true);
     }, 1500);
 
-    // Show dashboard after transition
+    // Show login gate after transition
     setTimeout(() => {
-      setShowDashboard(true);
+      setShowLoginGate(true);
     }, 3500);
   };
 
-  if (showDashboard) {
-    return <DashboardApp />;
+  if (showLoginGate) {
+    return <LoginGate />;
   }
 
   return (
