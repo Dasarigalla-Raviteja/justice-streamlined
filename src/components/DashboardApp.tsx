@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import { FileText, Clock, CheckCircle, AlertTriangle, BarChart3, Users, Settings, LogOut, Scale, Shield, Loader2 } from "lucide-react";
+import ActiveCasesPage from "./ActiveCasesPage";
 
 const DashboardApp = () => {
   const [activeTab, setActiveTab] = useState("upload");
@@ -33,7 +34,6 @@ const DashboardApp = () => {
   const handleAnalyze = async () => {
     if (!selectedFile) return;
     setIsAnalyzing(true);
-    // Simulate analysis
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsAnalyzing(false);
     setSelectedFile(null);
@@ -104,19 +104,23 @@ const DashboardApp = () => {
 
       {/* Main content */}
       <main className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="h-16 bg-card/50 border-b border-border/30 flex items-center justify-between px-6">
-          <div>
-            <h2 className="font-serif text-xl text-foreground">Case Upload & Analysis</h2>
-            <p className="text-xs text-muted-foreground">Submit official case documents for judicial timeline monitoring</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-2 h-2 rounded-full bg-[hsl(var(--status-success))]" />
-              System Active
-            </div>
-          </div>
-        </header>
+        {activeTab === "cases" ? (
+          <ActiveCasesPage />
+        ) : (
+          <>
+            {/* Header */}
+            <header className="h-16 bg-card/50 border-b border-border/30 flex items-center justify-between px-6">
+              <div>
+                <h2 className="font-serif text-xl text-foreground">Case Upload & Analysis</h2>
+                <p className="text-xs text-muted-foreground">Submit official case documents for judicial timeline monitoring</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="w-2 h-2 rounded-full bg-[hsl(var(--status-success))]" />
+                  System Active
+                </div>
+              </div>
+            </header>
 
         {/* Content area */}
         <div className="flex-1 p-6 overflow-auto">
@@ -337,6 +341,8 @@ const DashboardApp = () => {
             </div>
           </motion.div>
         </div>
+          </>
+        )}
       </main>
     </motion.div>
   );
