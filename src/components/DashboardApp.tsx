@@ -224,7 +224,7 @@ const DashboardApp = () => {
 
             {/* Security Notice */}
             <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
-              <Shield className="w-3.5 h-3.5" />
+              <Shield className="w-3.5 h-3.5 text-[hsl(43,59%,54%)]" />
               <span>All documents are securely processed and accessible only to authorized judicial personnel.</span>
             </div>
 
@@ -268,6 +268,9 @@ const DashboardApp = () => {
                   setSelectedFile(null);
                   setCategory("");
                   setPriority("");
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
                 }}
                 className="px-6 py-3 text-muted-foreground hover:text-foreground transition-colors"
               >
@@ -276,22 +279,19 @@ const DashboardApp = () => {
               <button 
                 onClick={handleAnalyze}
                 disabled={!isFormValid || isAnalyzing}
-                className={`px-8 py-3 font-medium rounded-lg flex items-center gap-2 transition-all duration-300 ${
+                className={`px-6 py-3 font-medium rounded-lg flex items-center gap-2 transition-all duration-300 ${
                   isFormValid && !isAnalyzing
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[var(--glow-gold)]"
-                    : "bg-muted text-muted-foreground cursor-not-allowed"
+                    ? "bg-[hsl(var(--btn-judicial))] text-[hsl(var(--btn-judicial-foreground))] hover:bg-[hsl(var(--btn-judicial-hover))] hover:shadow-[var(--glow-gold)]"
+                    : "bg-[hsl(var(--btn-judicial-disabled))] text-muted-foreground cursor-not-allowed"
                 }`}
               >
                 {isAnalyzing ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Analyzing Document...
+                    Analyzing...
                   </>
                 ) : (
-                  <>
-                    <Scale className="w-4 h-4" />
-                    Analyze Case & Generate Monitoring Timeline
-                  </>
+                  "Generate Monitoring Timeline"
                 )}
               </button>
             </div>
