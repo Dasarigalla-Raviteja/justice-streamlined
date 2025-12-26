@@ -50,6 +50,12 @@
     --dust-opacity: 0.4;
     --glow-gold: 0 0 60px hsl(43 52% 59% / 0.15);
     --glow-gold-strong: 0 0 100px hsl(43 52% 59% / 0.25);
+
+    /* Judicial gold button */
+    --btn-judicial: 43 59% 54%;
+    --btn-judicial-foreground: 222 47% 7%;
+    --btn-judicial-hover: 43 65% 60%;
+    --btn-judicial-disabled: 43 15% 40%;
   }
 
   .dark {
