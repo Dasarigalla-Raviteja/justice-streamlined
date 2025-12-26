@@ -66,9 +66,26 @@ const LandingPage = () => {
           <IdleClock isActivating={isLaunching} />
         </motion.div>
 
+        {/* System State Indicator */}
+        <motion.div
+          className="flex items-center gap-2 mt-4 mb-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          <span 
+            className={`w-2 h-2 rounded-full transition-colors duration-1000 ${
+              isLaunching ? 'bg-primary' : 'bg-muted-foreground/50'
+            }`}
+          />
+          <span className="text-xs font-sans text-muted-foreground/70 tracking-wider">
+            System State: {isLaunching ? 'Monitoring Enabled' : 'Inactive'}
+          </span>
+        </motion.div>
+
         {/* Headlines */}
         <motion.div
-          className="mt-6 md:mt-10 mb-8 md:mb-12"
+          className="mt-4 md:mt-6 mb-6 md:mb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.8 }}
@@ -83,11 +100,16 @@ const LandingPage = () => {
 
         {/* Launch Button */}
         <motion.div
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5 }}
         >
+          {/* Action Clarifier */}
+          <p className="text-muted-foreground/60 text-xs font-sans italic tracking-wide">
+            Begin monitored case scheduling
+          </p>
+
           <motion.button
             onClick={handleLaunch}
             disabled={isLaunching}
