@@ -6,7 +6,7 @@ interface IdleClockProps {
 
 const IdleClock = ({ isActivating = false }: IdleClockProps) => {
   return (
-    <div className="relative w-72 h-72 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem]">
+    <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80">
       {/* Breathing glow - very slow, subtle */}
       <motion.div
         className="absolute inset-0 rounded-full"
