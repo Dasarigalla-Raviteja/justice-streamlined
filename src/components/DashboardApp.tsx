@@ -3,7 +3,11 @@ import { useState, useRef } from "react";
 import { FileText, Clock, CheckCircle, AlertTriangle, BarChart3, Users, Settings, LogOut, Scale, Shield, Loader2 } from "lucide-react";
 import ActiveCasesPage from "./ActiveCasesPage";
 
-const DashboardApp = () => {
+interface DashboardAppProps {
+  onExit?: () => void;
+}
+
+const DashboardApp = ({ onExit }: DashboardAppProps) => {
   const [activeTab, setActiveTab] = useState("upload");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -95,7 +99,10 @@ const DashboardApp = () => {
 
         {/* User section */}
         <div className="p-4 border-t border-border/30">
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            onClick={onExit}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             <LogOut className="w-4 h-4" />
             Exit System
           </button>

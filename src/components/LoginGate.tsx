@@ -30,8 +30,16 @@ const LoginGate = () => {
     }, 1500);
   };
 
+  const handleExit = () => {
+    setShowDashboard(false);
+    setAccessGranted(false);
+    setIsAuthenticating(false);
+    setUsername("");
+    setPassword("");
+  };
+
   if (showDashboard) {
-    return <DashboardApp />;
+    return <DashboardApp onExit={handleExit} />;
   }
 
   return (
