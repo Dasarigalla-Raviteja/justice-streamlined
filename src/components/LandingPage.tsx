@@ -29,16 +29,55 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background">
-      {/* Subtle ambient gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary/10" />
-      
-      {/* Very subtle vignette */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, transparent 40%, hsl(222 47% 3% / 0.6) 100%)"
+      {/* Full-screen background image */}
+      <motion.div 
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ 
+          opacity: 1, 
+          scale: isLaunching ? 1.05 : 1 
         }}
-      />
+        transition={{ duration: 2, delay: 0.2 }}
+      >
+        <img
+          src={justiceScales}
+          alt="Scales of Justice"
+          className="w-full h-full object-cover"
+        />
+        {/* Dark overlay gradient for text readability */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(to bottom, 
+                hsl(222 47% 5% / 0.7) 0%, 
+                hsl(222 47% 5% / 0.5) 30%,
+                hsl(222 47% 5% / 0.6) 70%,
+                hsl(222 47% 5% / 0.85) 100%
+              )
+            `
+          }}
+        />
+        {/* Radial vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse at center, transparent 20%, hsl(222 47% 3% / 0.8) 100%)"
+          }}
+        />
+        {/* Gold tint overlay when activating */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: isLaunching ? 0.15 : 0
+          }}
+          transition={{ duration: 1.5 }}
+          style={{
+            background: "linear-gradient(to top, hsl(43 52% 59% / 0.3), transparent)"
+          }}
+        />
+      </motion.div>
 
       {/* Content */}
       <motion.div
@@ -57,42 +96,9 @@ const LandingPage = () => {
           A Judicial Monitoring Platform
         </motion.p>
 
-        {/* Justice Scales Image */}
-        <motion.div
-          className="relative w-64 h-48 md:w-80 md:h-60 lg:w-96 lg:h-72"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ 
-            opacity: 1, 
-            scale: isLaunching ? 1.02 : 1 
-          }}
-          transition={{ duration: 2, delay: 0.2 }}
-        >
-          <motion.img
-            src={justiceScales}
-            alt="Scales of Justice"
-            className="w-full h-full object-contain rounded-lg"
-            animate={{
-              filter: isLaunching ? "brightness(1.1)" : "brightness(1)"
-            }}
-            transition={{ duration: 1 }}
-          />
-          {/* Subtle glow effect when activating */}
-          <motion.div
-            className="absolute inset-0 rounded-lg pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: isLaunching ? 0.3 : 0,
-              boxShadow: isLaunching 
-                ? "0 0 60px 20px hsl(43 52% 59% / 0.3)" 
-                : "0 0 0 0 transparent"
-            }}
-            transition={{ duration: 1.5 }}
-          />
-        </motion.div>
-
         {/* System State Indicator */}
         <motion.div
-          className="flex items-center gap-2 mt-4 mb-2"
+          className="flex items-center gap-2 mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
