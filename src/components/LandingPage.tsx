@@ -93,17 +93,17 @@ const LandingPage = () => {
         </p>
       </motion.div>
 
-      {/* Main content - positioned to the right */}
+      {/* Main content - centered within right half */}
       <motion.div
-        className="relative z-10 flex-1 flex items-center justify-end px-8 md:px-16 lg:px-24"
+        className="relative z-10 flex-1 flex items-center justify-center md:justify-end px-8 md:px-16 lg:px-24"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLaunching && showTransition ? 0 : 1 }}
         transition={{ duration: 1 }}
       >
-        <div className="max-w-xl text-right">
+        <div className="max-w-xl text-center md:text-center md:mr-[5%] lg:mr-[10%]">
           {/* System State Indicator */}
           <motion.div
-            className="flex items-center justify-end gap-2 mb-6"
+            className="flex items-center justify-center gap-2 mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
@@ -121,15 +121,15 @@ const LandingPage = () => {
           {/* Headlines with text shadow and semi-transparent overlay */}
           <motion.div
             className="mb-8 md:mb-10 relative"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.8 }}
           >
             {/* Semi-transparent overlay behind text */}
             <div 
               className="absolute -inset-6 rounded-lg -z-10"
               style={{
-                background: "linear-gradient(to left, hsl(222 47% 5% / 0.15), transparent)"
+                background: "radial-gradient(ellipse at center, hsl(222 47% 5% / 0.2), transparent)"
               }}
             />
             <h1 
@@ -153,7 +153,7 @@ const LandingPage = () => {
 
           {/* Launch Button - Solid dark background with gold border */}
           <motion.div
-            className="flex flex-col items-end gap-4"
+            className="flex flex-col items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.5 }}
