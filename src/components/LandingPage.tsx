@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import IdleClock from "./IdleClock";
 import TransitionOverlay from "./TransitionOverlay";
 import LoginGate from "./LoginGate";
+import justiceScales from "@/assets/justice-scales.png";
 
 const LandingPage = () => {
   const [isLaunching, setIsLaunching] = useState(false);
@@ -57,13 +57,37 @@ const LandingPage = () => {
           A Judicial Monitoring Platform
         </motion.p>
 
-        {/* The Clock */}
+        {/* Justice Scales Image */}
         <motion.div
+          className="relative w-64 h-48 md:w-80 md:h-60 lg:w-96 lg:h-72"
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          animate={{ 
+            opacity: 1, 
+            scale: isLaunching ? 1.02 : 1 
+          }}
           transition={{ duration: 2, delay: 0.2 }}
         >
-          <IdleClock isActivating={isLaunching} />
+          <motion.img
+            src={justiceScales}
+            alt="Scales of Justice"
+            className="w-full h-full object-contain rounded-lg"
+            animate={{
+              filter: isLaunching ? "brightness(1.1)" : "brightness(1)"
+            }}
+            transition={{ duration: 1 }}
+          />
+          {/* Subtle glow effect when activating */}
+          <motion.div
+            className="absolute inset-0 rounded-lg pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: isLaunching ? 0.3 : 0,
+              boxShadow: isLaunching 
+                ? "0 0 60px 20px hsl(43 52% 59% / 0.3)" 
+                : "0 0 0 0 transparent"
+            }}
+            transition={{ duration: 1.5 }}
+          />
         </motion.div>
 
         {/* System State Indicator */}
