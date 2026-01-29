@@ -93,22 +93,34 @@ const LandingPage = () => {
         </p>
       </motion.div>
 
-      {/* Main content - centered within right half */}
+      {/* Main content - glassmorphism panel on right */}
       <motion.div
-        className="relative z-10 flex-1 flex items-center justify-center md:justify-end px-8 md:px-16 lg:px-24"
+        className="relative z-10 flex-1 flex items-center justify-center md:justify-end px-6 md:px-12 lg:px-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLaunching && showTransition ? 0 : 1 }}
         transition={{ duration: 1 }}
       >
-        <div className="max-w-xl text-center md:text-center md:mr-[5%] lg:mr-[10%]">
+        {/* Glassmorphism Content Panel */}
+        <motion.div 
+          className="relative w-full max-w-lg p-8 md:p-10 lg:p-12 rounded-2xl"
+          style={{
+            background: "linear-gradient(135deg, hsl(222 47% 8% / 0.85), hsl(222 47% 5% / 0.9))",
+            backdropFilter: "blur(20px)",
+            border: "1px solid hsl(43 52% 50% / 0.15)",
+            boxShadow: "0 8px 32px hsl(222 47% 3% / 0.5), inset 0 1px 0 hsl(43 52% 50% / 0.1)"
+          }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, delay: 0.5 }}
+        >
           {/* System State Indicator */}
           <motion.div
             className="flex items-center justify-center gap-2 mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
+            transition={{ duration: 1, delay: 0.8 }}
           >
-            <span className="text-xs font-sans text-muted-foreground/70 tracking-wider">
+            <span className="text-xs font-sans text-muted-foreground/80 tracking-wider uppercase">
               System State: {isLaunching ? 'Monitoring Enabled' : 'Inactive'}
             </span>
             <span 
@@ -118,59 +130,46 @@ const LandingPage = () => {
             />
           </motion.div>
 
-          {/* Headlines with text shadow and semi-transparent overlay */}
+          {/* Headlines */}
           <motion.div
-            className="mb-8 md:mb-10 relative"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.8 }}
+            transition={{ duration: 1, delay: 1 }}
           >
-            {/* Semi-transparent overlay behind text */}
-            <div 
-              className="absolute -inset-6 rounded-lg -z-10"
-              style={{
-                background: "radial-gradient(ellipse at center, hsl(222 47% 5% / 0.2), transparent)"
-              }}
-            />
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground mb-3 tracking-tight"
-              style={{ 
-                textShadow: "0 1px 2px hsl(222 47% 3% / 0.9), 0 2px 20px hsl(222 47% 3% / 0.8), 0 4px 40px hsl(222 47% 3% / 0.6)" 
-              }}
+              className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground mb-3 tracking-tight"
             >
               Justice is waiting.
             </h1>
             <p 
-              className="text-2xl md:text-3xl lg:text-4xl font-serif"
-              style={{ 
-                color: "#C9A24D",
-                textShadow: "0 1px 2px hsl(222 47% 3% / 0.9), 0 2px 15px hsl(43 52% 50% / 0.3), 0 4px 30px hsl(222 47% 3% / 0.8)" 
-              }}
+              className="text-xl md:text-2xl lg:text-3xl font-serif"
+              style={{ color: "#C9A24D" }}
             >
               Time is not.
             </p>
           </motion.div>
 
-          {/* Launch Button - Solid dark background with gold border */}
+          {/* Launch Button */}
           <motion.div
             className="flex flex-col items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
+            transition={{ duration: 1, delay: 1.3 }}
           >
             <motion.button
               onClick={handleLaunch}
               disabled={isLaunching}
-              className="group relative px-10 py-4 font-sans text-sm tracking-[0.2em] uppercase transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full px-8 py-4 font-sans text-sm tracking-[0.2em] uppercase transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
               style={{
-                background: "hsl(222 47% 8%)",
+                background: "hsl(222 47% 10%)",
                 border: "1px solid #C9A24D",
                 color: "#C9A24D",
-                boxShadow: "0 4px 30px hsl(222 47% 3% / 0.8), 0 0 20px hsl(43 52% 50% / 0.1)"
+                boxShadow: "0 4px 20px hsl(222 47% 3% / 0.6)"
               }}
               whileHover={{ 
-                boxShadow: "0 4px 30px hsl(222 47% 3% / 0.8), 0 0 30px hsl(43 52% 50% / 0.25)",
-                background: "hsl(222 47% 10%)"
+                boxShadow: "0 4px 30px hsl(222 47% 3% / 0.8), 0 0 20px hsl(43 52% 50% / 0.2)",
+                background: "hsl(222 47% 12%)"
               }}
             >
               <span className="relative z-10">
@@ -178,17 +177,17 @@ const LandingPage = () => {
               </span>
               
               {/* Corner accents */}
-              <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary transition-all duration-300 group-hover:w-4 group-hover:h-4" />
-              <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary transition-all duration-300 group-hover:w-4 group-hover:h-4" />
-              <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary transition-all duration-300 group-hover:w-4 group-hover:h-4" />
-              <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary transition-all duration-300 group-hover:w-4 group-hover:h-4" />
+              <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary/60 rounded-tl transition-all duration-300 group-hover:w-4 group-hover:h-4 group-hover:border-primary" />
+              <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary/60 rounded-tr transition-all duration-300 group-hover:w-4 group-hover:h-4 group-hover:border-primary" />
+              <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary/60 rounded-bl transition-all duration-300 group-hover:w-4 group-hover:h-4 group-hover:border-primary" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary/60 rounded-br transition-all duration-300 group-hover:w-4 group-hover:h-4 group-hover:border-primary" />
             </motion.button>
 
-            <p className="text-muted-foreground/60 text-xs font-sans tracking-wide">
+            <p className="text-muted-foreground/60 text-xs font-sans tracking-wide text-center">
               For authorized judicial and administrative use
             </p>
           </motion.div>
-        </div>
+        </motion.div>
       </motion.div>
 
       {/* Transition Overlay */}
