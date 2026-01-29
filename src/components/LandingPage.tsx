@@ -40,7 +40,7 @@ const LandingPage = () => {
         <img
           src={judicialHeroBg}
           alt="Scales of Justice"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
         />
         {/* Dark overlay gradient for text readability - heavier on right side */}
         <div 
