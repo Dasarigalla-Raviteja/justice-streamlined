@@ -27,16 +27,19 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden bg-background">
-      {/* Full-screen background image - centered */}
-      <motion.div 
-        className="absolute inset-0 z-0"
+      {/* Full-screen clickable background image */}
+      <motion.button
+        onClick={handleLaunch}
+        disabled={isLaunching}
+        className="absolute inset-0 z-0 cursor-pointer disabled:cursor-wait border-0 bg-transparent p-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
+        whileHover={{ scale: 1.01 }}
       >
         <img
           src={judicialHeroBg}
-          alt="Scales of Justice"
+          alt="Scales of Justice - Click to Access System"
           className="w-full h-full object-cover object-center"
         />
         {/* Subtle dark overlay for text readability */}
@@ -53,7 +56,7 @@ const LandingPage = () => {
             `
           }}
         />
-      </motion.div>
+      </motion.button>
 
       {/* Top - Institutional title */}
       <motion.header
@@ -73,25 +76,18 @@ const LandingPage = () => {
       {/* Center - Spacer to push content into place */}
       <div className="flex-1" />
 
-      {/* Bottom - Primary action button */}
+      {/* Click anywhere hint */}
       <motion.footer
-        className="relative z-10 pb-16 md:pb-20 flex justify-center"
-        initial={{ opacity: 0, y: 20 }}
+        className="relative z-10 pb-8 flex justify-center"
+        initial={{ opacity: 0 }}
         animate={{ 
-          opacity: isLaunching && showTransition ? 0 : 1, 
-          y: 0 
+          opacity: isLaunching ? 0 : 0.6
         }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
       >
-        <motion.button
-          onClick={handleLaunch}
-          disabled={isLaunching}
-          className="px-10 py-4 font-sans text-sm tracking-[0.2em] uppercase transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/30"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          {isLaunching ? "Authenticating..." : "Access System"}
-        </motion.button>
+        <p className="text-xs text-muted-foreground tracking-[0.2em] uppercase">
+          {isLaunching ? "Authenticating..." : "Click to enter"}
+        </p>
       </motion.footer>
 
       {/* Transition Overlay */}
