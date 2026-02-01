@@ -177,12 +177,12 @@ const DashboardApp = ({ onExit }: DashboardAppProps) => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Requires Attention</p>
-                  <p className="text-3xl font-serif text-[hsl(var(--status-danger))] mt-1">312</p>
-                  <p className="text-xs text-muted-foreground mt-2">Cases exceeding expected timelines</p>
+                  <p className="text-muted-foreground text-sm">Completed Cases</p>
+                  <p className="text-3xl font-serif text-[hsl(var(--status-success))] mt-1">4,521</p>
+                  <p className="text-xs text-muted-foreground mt-2">Cases successfully resolved</p>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-[hsl(var(--status-danger))]/10 flex items-center justify-center">
-                  <AlertTriangle className="w-6 h-6 text-[hsl(var(--status-danger))]" />
+                <div className="w-12 h-12 rounded-full bg-[hsl(var(--status-success))]/10 flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-[hsl(var(--status-success))]" />
                 </div>
               </div>
             </motion.div>
