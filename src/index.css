@@ -43,8 +43,8 @@
     --radius: 0.5rem;
 
     /* Judicial typography */
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: Arial, Helvetica, sans-serif;
+    --font-sans: Arial, Helvetica, sans-serif;
 
     /* Ambient effects */
     --dust-opacity: 0.4;
