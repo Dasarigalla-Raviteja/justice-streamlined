@@ -4,63 +4,46 @@
 
 @layer base {
   :root {
-    /* Deep judicial color palette */
-    --background: 222 47% 7%;
-    --foreground: 40 20% 92%;
+    /* Government of India portal color palette */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
 
-    --card: 222 40% 10%;
-    --card-foreground: 40 20% 92%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 20%;
 
-    --popover: 222 40% 10%;
-    --popover-foreground: 40 20% 92%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
 
-    /* Antique gold - authority and tradition */
-    --primary: 43 52% 59%;
-    --primary-foreground: 222 47% 7%;
+    /* Government blue - primary action color */
+    --primary: 211 63% 35%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Deep navy secondary */
-    --secondary: 222 35% 15%;
-    --secondary-foreground: 40 20% 92%;
+    /* Light gray for secondary elements */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 20%;
 
-    --muted: 222 30% 18%;
-    --muted-foreground: 220 15% 55%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 43 52% 59%;
-    --accent-foreground: 222 47% 7%;
+    --accent: 211 63% 35%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 40 20% 92%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Status colors for timeline */
-    --status-success: 142 71% 45%;
-    --status-warning: 38 92% 50%;
-    --status-danger: 0 84% 60%;
+    /* Status colors - subtle, official */
+    --status-success: 142 50% 40%;
+    --status-warning: 38 70% 45%;
+    --status-danger: 0 65% 50%;
 
-    --border: 222 25% 20%;
-    --input: 222 25% 20%;
-    --ring: 43 52% 59%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 211 63% 35%;
 
-    --radius: 0.5rem;
+    --radius: 0;
 
-    /* Judicial typography */
-    --font-serif: Arial, Helvetica, sans-serif;
+    /* Government typography - system fonts */
     --font-sans: Arial, Helvetica, sans-serif;
-
-    /* Ambient effects */
-    --dust-opacity: 0.4;
-    --glow-gold: 0 0 60px hsl(43 52% 59% / 0.15);
-    --glow-gold-strong: 0 0 100px hsl(43 52% 59% / 0.25);
-
-    /* Judicial gold button */
-    --btn-judicial: 43 59% 54%;
-    --btn-judicial-foreground: 222 47% 7%;
-    --btn-judicial-hover: 43 65% 60%;
-    --btn-judicial-disabled: 43 15% 40%;
-  }
-
-  .dark {
-    --background: 222 47% 7%;
-    --foreground: 40 20% 92%;
   }
 }
 
@@ -76,111 +59,65 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
+    font-size: 14px;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
-    @apply tracking-tight;
+    font-family: var(--font-sans);
+    font-weight: 600;
   }
 }
 
 @layer components {
-  .text-gradient-gold {
-    @apply bg-gradient-to-r from-primary via-amber-400 to-primary bg-clip-text text-transparent;
+  .govt-header {
+    @apply bg-primary text-primary-foreground py-3 px-4;
   }
 
-  .judicial-container {
-    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  .govt-nav-link {
+    @apply text-primary-foreground/90 hover:text-primary-foreground hover:underline text-sm px-3 py-1;
   }
 
-  .narrative-section {
-    @apply min-h-screen flex items-center justify-center relative overflow-hidden;
+  .govt-section {
+    @apply bg-card border border-border p-4;
   }
 
-  .glass-panel {
-    @apply bg-card/40 backdrop-blur-xl border border-border/30 rounded-lg;
+  .govt-stat-tile {
+    @apply bg-secondary border border-border p-4;
   }
 
-  .timeline-node {
-    @apply w-4 h-4 rounded-full border-2 transition-all duration-500;
+  .govt-btn-primary {
+    @apply bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 border-0;
   }
 
-  .timeline-node-success {
-    @apply bg-[hsl(var(--status-success))] border-[hsl(var(--status-success))];
+  .govt-btn-secondary {
+    @apply bg-muted text-foreground px-4 py-2 text-sm font-medium hover:bg-muted/80 border border-border;
   }
 
-  .timeline-node-warning {
-    @apply bg-[hsl(var(--status-warning))] border-[hsl(var(--status-warning))] animate-pulse;
+  .govt-input {
+    @apply bg-background border border-border px-3 py-2 text-sm w-full focus:outline-none focus:border-primary;
   }
 
-  .timeline-node-danger {
-    @apply bg-[hsl(var(--status-danger))] border-[hsl(var(--status-danger))] animate-pulse;
-  }
-}
-
-@layer utilities {
-  .fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
+  .govt-select {
+    @apply bg-background border border-border px-3 py-2 text-sm w-full focus:outline-none focus:border-primary;
   }
 
-  .float-slow {
-    animation: float 8s ease-in-out infinite;
+  .govt-label {
+    @apply text-sm font-medium text-foreground mb-1 block;
   }
 
-  .dust-particle {
-    animation: dustFloat 12s ease-in-out infinite;
+  .govt-table {
+    @apply w-full border-collapse;
   }
 
-  .clock-tick {
-    animation: tickTock 2s ease-in-out infinite;
+  .govt-table th {
+    @apply bg-muted text-left p-2 border border-border text-sm font-semibold;
   }
-}
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+  .govt-table td {
+    @apply p-2 border border-border text-sm;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(2deg);
-  }
-}
-
-@keyframes dustFloat {
-  0%, 100% {
-    opacity: 0.2;
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateY(-30px) translateX(10px);
-  }
-}
-
-@keyframes tickTock {
-  0%, 100% {
-    transform: rotate(-1deg);
-  }
-  50% {
-    transform: rotate(1deg);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px hsl(0 84% 60% / 0.3);
-  }
-  50% {
-    box-shadow: 0 0 40px hsl(0 84% 60% / 0.6);
+  .govt-table tr:nth-child(even) {
+    @apply bg-secondary/50;
   }
 }

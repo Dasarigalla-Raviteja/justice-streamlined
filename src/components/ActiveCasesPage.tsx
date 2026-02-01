@@ -1,20 +1,15 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
-import { Search, Filter, ArrowUpDown, Calendar, AlertTriangle, CheckCircle, Clock } from "lucide-react";
-import CaseDetailPanel from "./CaseDetailPanel";
+import { Search, Filter, Eye, X } from "lucide-react";
 
-interface CaseData {
+interface Case {
   id: string;
-  category: string;
-  priority: string;
-  status: "on-track" | "warning" | "delayed";
-  statusLabel: string;
-  court: string;
-  nextHearing: string;
-  delayDays?: number;
-  filingDate: string;
+  type: string;
   parties: string;
-  progress: number;
+  court: string;
+  filingDate: string;
+  nextHearing: string;
+  status: "On Track" | "Warning" | "Delayed";
+  priority: "Standard" | "High" | "Urgent";
 }
 
 const ActiveCasesPage = () => {
@@ -22,137 +17,86 @@ const ActiveCasesPage = () => {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
-  const [sortBy, setSortBy] = useState("hearing");
-  const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedCase, setSelectedCase] = useState<Case | null>(null);
 
-  const cases: CaseData[] = [
-    { id: "CIV-2024-0847", category: "Civil Dispute", priority: "Standard", status: "on-track", statusLabel: "On Track", court: "District Court, Delhi", nextHearing: "2024-12-28", filingDate: "2024-01-15", parties: "Sharma vs. Municipal Corp.", progress: 65 },
-    { id: "CRM-2024-1203", category: "Criminal Case", priority: "High", status: "warning", statusLabel: "Warning", court: "Sessions Court, Mumbai", nextHearing: "2024-12-30", delayDays: 8, filingDate: "2024-02-20", parties: "State vs. Mehta", progress: 45 },
-    { id: "FAM-2024-0392", category: "Family Court", priority: "Standard", status: "on-track", statusLabel: "On Track", court: "Family Court, Bangalore", nextHearing: "2025-01-05", filingDate: "2024-03-10", parties: "Reddy vs. Reddy", progress: 30 },
-    { id: "COM-2024-0156", category: "Commercial", priority: "Urgent", status: "delayed", statusLabel: "Delayed", court: "High Court, Chennai", nextHearing: "2024-12-27", delayDays: 21, filingDate: "2023-11-05", parties: "TechCorp vs. InfoSys Ltd.", progress: 80 },
-    { id: "CIV-2024-1089", category: "Civil Dispute", priority: "Standard", status: "on-track", statusLabel: "On Track", court: "District Court, Kolkata", nextHearing: "2025-01-10", filingDate: "2024-04-22", parties: "Das vs. State Bank", progress: 25 },
-    { id: "TAX-2024-0234", category: "Taxation", priority: "High", status: "warning", statusLabel: "Warning", court: "Tax Tribunal, Delhi", nextHearing: "2024-12-29", delayDays: 5, filingDate: "2024-01-30", parties: "Revenue vs. GlobalTrade Inc.", progress: 55 },
-    { id: "CON-2024-0018", category: "Constitutional", priority: "Urgent", status: "on-track", statusLabel: "On Track", court: "Supreme Court", nextHearing: "2025-01-15", filingDate: "2024-05-01", parties: "Citizens Forum vs. Union of India", progress: 40 },
-    { id: "CRM-2024-0892", category: "Criminal Case", priority: "High", status: "delayed", statusLabel: "Delayed", court: "Sessions Court, Hyderabad", nextHearing: "2024-12-26", delayDays: 14, filingDate: "2023-12-10", parties: "State vs. Rao", progress: 70 },
+  const cases: Case[] = [
+    { id: "CIV/2024/0847", type: "Civil", parties: "Sharma vs. State", court: "District Court, Delhi", filingDate: "15-01-2024", nextHearing: "22-01-2024", status: "On Track", priority: "Standard" },
+    { id: "CRM/2024/1203", type: "Criminal", parties: "State vs. Kumar", court: "Sessions Court, Mumbai", filingDate: "14-01-2024", nextHearing: "25-01-2024", status: "Warning", priority: "High" },
+    { id: "FAM/2024/0392", type: "Family", parties: "Gupta vs. Gupta", court: "Family Court, Chennai", filingDate: "13-01-2024", nextHearing: "20-01-2024", status: "On Track", priority: "Standard" },
+    { id: "COM/2024/0156", type: "Commercial", parties: "ABC Ltd. vs. XYZ Corp.", court: "High Court, Kolkata", filingDate: "12-01-2024", nextHearing: "28-01-2024", status: "Delayed", priority: "Urgent" },
+    { id: "CIV/2024/0923", type: "Civil", parties: "Patel vs. Singh", court: "District Court, Ahmedabad", filingDate: "11-01-2024", nextHearing: "23-01-2024", status: "On Track", priority: "Standard" },
+    { id: "CRM/2024/1156", type: "Criminal", parties: "State vs. Verma", court: "Sessions Court, Bangalore", filingDate: "10-01-2024", nextHearing: "24-01-2024", status: "Warning", priority: "High" },
   ];
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "on-track": return <CheckCircle className="w-4 h-4 text-[hsl(var(--status-success))]" />;
-      case "warning": return <Clock className="w-4 h-4 text-[hsl(var(--status-warning))]" />;
-      case "delayed": return <AlertTriangle className="w-4 h-4 text-[hsl(var(--status-danger))]" />;
-      default: return null;
-    }
-  };
-
-  const getStatusBadgeClass = (status: string) => {
-    switch (status) {
-      case "on-track": return "bg-[hsl(var(--status-success))]/10 text-[hsl(var(--status-success))]";
-      case "warning": return "bg-[hsl(var(--status-warning))]/10 text-[hsl(var(--status-warning))]";
-      case "delayed": return "bg-[hsl(var(--status-danger))]/10 text-[hsl(var(--status-danger))]";
-      default: return "bg-muted text-muted-foreground";
-    }
-  };
-
-  const getProgressColor = (status: string) => {
-    switch (status) {
-      case "on-track": return "bg-[hsl(var(--status-success))]";
-      case "warning": return "bg-[hsl(var(--status-warning))]";
-      case "delayed": return "bg-[hsl(var(--status-danger))]";
-      default: return "bg-primary";
-    }
-  };
-
-  const handleCaseClick = (caseData: CaseData) => {
-    setSelectedCase(caseData);
-    setIsPanelOpen(true);
-  };
-
-  const filteredCases = cases.filter((c) => {
-    if (searchQuery && !c.id.toLowerCase().includes(searchQuery.toLowerCase()) && !c.parties.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    if (categoryFilter && c.category !== categoryFilter) return false;
-    if (statusFilter && c.status !== statusFilter) return false;
-    if (priorityFilter && c.priority !== priorityFilter) return false;
-    return true;
-  });
-
-  const sortedCases = [...filteredCases].sort((a, b) => {
-    if (sortBy === "hearing") {
-      return new Date(a.nextHearing).getTime() - new Date(b.nextHearing).getTime();
-    }
-    if (sortBy === "delay") {
-      return (b.delayDays || 0) - (a.delayDays || 0);
-    }
-    return 0;
+  const filteredCases = cases.filter(c => {
+    const matchesSearch = c.id.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         c.parties.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !categoryFilter || c.type.toLowerCase() === categoryFilter.toLowerCase();
+    const matchesStatus = !statusFilter || c.status === statusFilter;
+    const matchesPriority = !priorityFilter || c.priority === priorityFilter;
+    return matchesSearch && matchesCategory && matchesStatus && matchesPriority;
   });
 
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Header */}
-      <header className="h-16 bg-card/50 border-b border-border/30 flex items-center justify-between px-6">
-        <div>
-          <h2 className="font-serif text-xl text-foreground">Active Cases</h2>
-          <p className="text-xs text-muted-foreground">Monitor case progress and identify timeline deviations</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="w-2 h-2 rounded-full bg-[hsl(var(--status-success))]" />
-            {sortedCases.length} cases displayed
-          </div>
-        </div>
-      </header>
+    <div>
+      {/* Breadcrumb */}
+      <div className="text-sm text-muted-foreground mb-4">
+        Home &gt; Case Status &gt; Active Cases
+      </div>
 
-      {/* Control Bar */}
-      <div className="p-4 bg-card/30 border-b border-border/20">
-        <div className="flex flex-wrap gap-4 items-center">
-          {/* Search */}
-          <div className="relative flex-1 min-w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search by Case ID or party name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-muted/50 border border-border/50 rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
-            />
+      {/* Search and Filters */}
+      <div className="govt-section mb-4">
+        <h2 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+          Search and Filter Cases
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="md:col-span-2">
+            <label className="govt-label">Search by Case ID or Party Name</label>
+            <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="govt-input pl-9"
+                placeholder="Enter Case ID or Party Name"
+              />
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+            </div>
           </div>
-
-          {/* Filters */}
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            
-            <select
+          <div>
+            <label className="govt-label">Case Category</label>
+            <select 
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+              className="govt-select"
             >
               <option value="">All Categories</option>
-              <option value="Civil Dispute">Civil Dispute</option>
-              <option value="Criminal Case">Criminal Case</option>
-              <option value="Family Court">Family Court</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Constitutional">Constitutional</option>
-              <option value="Taxation">Taxation</option>
+              <option value="civil">Civil</option>
+              <option value="criminal">Criminal</option>
+              <option value="family">Family</option>
+              <option value="commercial">Commercial</option>
             </select>
-
-            <select
+          </div>
+          <div>
+            <label className="govt-label">Monitoring Status</label>
+            <select 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+              className="govt-select"
             >
               <option value="">All Status</option>
-              <option value="on-track">On Track</option>
-              <option value="warning">Warning</option>
-              <option value="delayed">Delayed</option>
+              <option value="On Track">On Track</option>
+              <option value="Warning">Warning</option>
+              <option value="Delayed">Delayed</option>
             </select>
-
-            <select
+          </div>
+          <div>
+            <label className="govt-label">Priority Level</label>
+            <select 
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+              className="govt-select"
             >
               <option value="">All Priorities</option>
               <option value="Standard">Standard</option>
@@ -160,103 +104,185 @@ const ActiveCasesPage = () => {
               <option value="Urgent">Urgent</option>
             </select>
           </div>
+        </div>
 
-          {/* Sort */}
-          <div className="flex items-center gap-2">
-            <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
-            >
-              <option value="hearing">Next Hearing Date</option>
-              <option value="delay">Delay Severity</option>
-            </select>
+        <div className="flex gap-3 mt-4">
+          <button className="govt-btn-primary flex items-center gap-2">
+            <Filter className="w-4 h-4" />
+            Apply Filters
+          </button>
+          <button 
+            className="govt-btn-secondary"
+            onClick={() => {
+              setSearchQuery("");
+              setCategoryFilter("");
+              setStatusFilter("");
+              setPriorityFilter("");
+            }}
+          >
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      {/* Results */}
+      <div className="govt-section">
+        <div className="flex justify-between items-center mb-4 pb-2 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">
+            Active Cases ({filteredCases.length} records)
+          </h2>
+          <button className="text-primary hover:underline text-sm">
+            Export to Excel
+          </button>
+        </div>
+
+        <table className="govt-table">
+          <thead>
+            <tr>
+              <th>Case Number</th>
+              <th>Type</th>
+              <th>Parties</th>
+              <th>Court</th>
+              <th>Filing Date</th>
+              <th>Next Hearing</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCases.map((c) => (
+              <tr key={c.id}>
+                <td className="font-medium">{c.id}</td>
+                <td>{c.type}</td>
+                <td>{c.parties}</td>
+                <td>{c.court}</td>
+                <td>{c.filingDate}</td>
+                <td>{c.nextHearing}</td>
+                <td>
+                  <span className={`px-2 py-0.5 text-xs ${
+                    c.status === "On Track" 
+                      ? "bg-status-success/10 text-status-success" 
+                      : c.status === "Warning"
+                      ? "bg-status-warning/10 text-status-warning"
+                      : "bg-status-danger/10 text-status-danger"
+                  }`}>
+                    {c.status}
+                  </span>
+                </td>
+                <td>
+                  <span className={`text-xs ${
+                    c.priority === "Urgent" ? "text-status-danger font-medium" :
+                    c.priority === "High" ? "text-status-warning" : "text-muted-foreground"
+                  }`}>
+                    {c.priority}
+                  </span>
+                </td>
+                <td>
+                  <button 
+                    onClick={() => setSelectedCase(c)}
+                    className="text-primary hover:underline text-sm flex items-center gap-1"
+                  >
+                    <Eye className="w-3 h-3" />
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        <div className="flex justify-between items-center mt-4 pt-4 border-t border-border">
+          <p className="text-sm text-muted-foreground">
+            Showing 1 to {filteredCases.length} of {filteredCases.length} entries
+          </p>
+          <div className="flex gap-1">
+            <button className="px-3 py-1 border border-border text-sm text-muted-foreground">Previous</button>
+            <button className="px-3 py-1 border border-primary bg-primary text-primary-foreground text-sm">1</button>
+            <button className="px-3 py-1 border border-border text-sm text-muted-foreground">2</button>
+            <button className="px-3 py-1 border border-border text-sm text-muted-foreground">3</button>
+            <button className="px-3 py-1 border border-border text-sm text-muted-foreground">Next</button>
           </div>
         </div>
       </div>
 
-      {/* Case Grid */}
-      <div className="flex-1 p-6 overflow-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-          {sortedCases.map((caseItem, index) => (
-            <motion.div
-              key={caseItem.id}
-              className="glass-panel p-5 cursor-pointer hover:border-primary/30 transition-all duration-200 hover:shadow-[var(--glow-gold)]"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => handleCaseClick(caseItem)}
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h3 className="font-serif text-lg text-foreground">{caseItem.id}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{caseItem.category}</p>
-                </div>
-                <span className={`text-xs px-2 py-1 rounded flex items-center gap-1.5 ${getStatusBadgeClass(caseItem.status)}`}>
-                  {getStatusIcon(caseItem.status)}
-                  {caseItem.statusLabel}
-                </span>
+      {/* Case Detail Modal */}
+      {selectedCase && (
+        <div className="fixed inset-0 bg-foreground/50 flex items-center justify-center z-50">
+          <div className="bg-background border border-border w-full max-w-2xl max-h-[80vh] overflow-auto">
+            <div className="flex justify-between items-center p-4 border-b border-border bg-muted">
+              <h3 className="font-semibold">Case Details: {selectedCase.id}</h3>
+              <button onClick={() => setSelectedCase(null)} className="text-muted-foreground hover:text-foreground">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4">
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium w-1/3">Case Number</td>
+                    <td className="py-2">{selectedCase.id}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Case Type</td>
+                    <td className="py-2">{selectedCase.type}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Parties</td>
+                    <td className="py-2">{selectedCase.parties}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Court</td>
+                    <td className="py-2">{selectedCase.court}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Filing Date</td>
+                    <td className="py-2">{selectedCase.filingDate}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Next Hearing</td>
+                    <td className="py-2">{selectedCase.nextHearing}</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-2 font-medium">Monitoring Status</td>
+                    <td className="py-2">
+                      <span className={`px-2 py-0.5 text-xs ${
+                        selectedCase.status === "On Track" 
+                          ? "bg-status-success/10 text-status-success" 
+                          : selectedCase.status === "Warning"
+                          ? "bg-status-warning/10 text-status-warning"
+                          : "bg-status-danger/10 text-status-danger"
+                      }`}>
+                        {selectedCase.status}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 font-medium">Priority</td>
+                    <td className="py-2">{selectedCase.priority}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div className="mt-4 p-3 bg-muted border border-border">
+                <h4 className="font-medium text-sm mb-2">Timeline History</h4>
+                <ul className="text-xs text-muted-foreground space-y-1">
+                  <li>• 15-01-2024: Case filed and registered</li>
+                  <li>• 16-01-2024: Case assigned to monitoring system</li>
+                  <li>• 18-01-2024: First hearing scheduled for 22-01-2024</li>
+                </ul>
               </div>
 
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
-                  <span>Case Progress</span>
-                  <span>{caseItem.progress}%</span>
-                </div>
-                <div className="h-1.5 bg-muted/50 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-500 ${getProgressColor(caseItem.status)}`}
-                    style={{ width: `${caseItem.progress}%` }}
-                  />
-                </div>
+              <div className="flex gap-3 mt-4 pt-4 border-t border-border">
+                <button className="govt-btn-primary">View Full Timeline</button>
+                <button className="govt-btn-secondary">Download Report</button>
+                <button onClick={() => setSelectedCase(null)} className="govt-btn-secondary">Close</button>
               </div>
-
-              {/* Details */}
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Next: {caseItem.nextHearing}</span>
-                </div>
-                {caseItem.delayDays && (
-                  <div className="flex items-center gap-2 text-[hsl(var(--status-danger))]">
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                    <span>Delayed by {caseItem.delayDays} days</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Priority Badge */}
-              <div className="mt-4 pt-3 border-t border-border/20">
-                <span className={`text-xs px-2 py-1 rounded ${
-                  caseItem.priority === "Urgent" 
-                    ? "bg-[hsl(var(--status-danger))]/10 text-[hsl(var(--status-danger))]"
-                    : caseItem.priority === "High"
-                    ? "bg-[hsl(var(--status-warning))]/10 text-[hsl(var(--status-warning))]"
-                    : "bg-primary/10 text-primary"
-                }`}>
-                  {caseItem.priority} Priority
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {sortedCases.length === 0 && (
-          <div className="flex items-center justify-center h-64">
-            <p className="text-muted-foreground">No cases match the selected filters.</p>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Case Detail Panel */}
-      <CaseDetailPanel
-        caseData={selectedCase}
-        isOpen={isPanelOpen}
-        onClose={() => setIsPanelOpen(false)}
-      />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import { motion } from "framer-motion";
 import { useState, useRef } from "react";
-import { FileText, Clock, CheckCircle, AlertTriangle, BarChart3, Users, Settings, LogOut, Scale, Shield, Loader2 } from "lucide-react";
+import { FileText, Clock, BarChart3, Users, Settings, LogOut, Upload, AlertCircle, CheckCircle, Home } from "lucide-react";
 import ActiveCasesPage from "./ActiveCasesPage";
 
 interface DashboardAppProps {
@@ -15,13 +14,12 @@ const DashboardApp = ({ onExit }: DashboardAppProps) => {
   const [priority, setPriority] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const sidebarItems = [
-    { id: "upload", icon: Scale, label: "Case Upload" },
-    { id: "cases", icon: FileText, label: "Active Cases" },
-    { id: "timeline", icon: Clock, label: "Timeline" },
-    { id: "analytics", icon: BarChart3, label: "Analytics" },
-    { id: "users", icon: Users, label: "Users" },
-    { id: "settings", icon: Settings, label: "Settings" },
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "upload", label: "Case Upload" },
+    { id: "cases", label: "Case Status" },
+    { id: "reports", label: "Reports" },
+    { id: "users", label: "Users" },
   ];
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,311 +45,289 @@ const DashboardApp = ({ onExit }: DashboardAppProps) => {
 
   const isFormValid = selectedFile && category && priority;
 
-  const recentActivity = [
-    { id: "CIV-2024-0847", status: "On Schedule", statusType: "success", action: "Hearing completed within expected timeline", time: "2 hours ago" },
-    { id: "CRM-2024-1203", status: "Pending", statusType: "warning", action: "Rescheduling requested — awaiting judicial approval", time: "4 hours ago" },
-    { id: "FAM-2024-0392", status: "On Schedule", statusType: "success", action: "Evidence submission deadline met", time: "6 hours ago" },
-    { id: "COM-2024-0156", status: "Overdue", statusType: "danger", action: "Hearing exceeded scheduled timeline — requires attention", time: "1 day ago" },
+  const recentCases = [
+    { id: "CIV/2024/0847", type: "Civil", status: "On Schedule", court: "District Court, Delhi", date: "15-01-2024" },
+    { id: "CRM/2024/1203", type: "Criminal", status: "Pending", court: "Sessions Court, Mumbai", date: "14-01-2024" },
+    { id: "FAM/2024/0392", type: "Family", status: "Disposed", court: "Family Court, Chennai", date: "13-01-2024" },
+    { id: "COM/2024/0156", type: "Commercial", status: "Delayed", court: "High Court, Kolkata", date: "12-01-2024" },
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-background flex"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border/50 flex flex-col">
-        {/* Logo */}
-        <div className="p-6 border-b border-border/30">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border-2 border-primary/50 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-primary" />
+    <div className="min-h-screen bg-background">
+      {/* Government Header */}
+      <header className="govt-header">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary-foreground/20 flex items-center justify-center">
+                <Clock className="w-6 h-6" />
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold">Judicial Case Monitoring System</h1>
+                <p className="text-xs text-primary-foreground/80">Government of India | Department of Justice</p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-serif text-lg text-foreground">Time of Justice</h1>
-              <p className="text-xs text-muted-foreground">Monitoring System</p>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-primary-foreground/80">Welcome, Administrator</span>
+              <button 
+                onClick={onExit}
+                className="flex items-center gap-1 text-sm text-primary-foreground/80 hover:text-primary-foreground"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-1">
-            {sidebarItems.map((item) => (
+      {/* Navigation Bar */}
+      <nav className="bg-muted border-b border-border">
+        <div className="max-w-7xl mx-auto">
+          <ul className="flex">
+            {navItems.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all duration-200 ${
+                  className={`px-4 py-2 text-sm border-b-2 transition-colors ${
                     activeTab === item.id
-                      ? "bg-primary/10 text-primary border-l-2 border-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      ? "border-primary text-primary font-medium bg-background"
+                      : "border-transparent text-muted-foreground hover:text-foreground hover:bg-background/50"
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
                   {item.label}
                 </button>
               </li>
             ))}
           </ul>
-        </nav>
-
-        {/* User section */}
-        <div className="p-4 border-t border-border/30">
-          <button 
-            onClick={onExit}
-            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Exit System
-          </button>
         </div>
-      </aside>
+      </nav>
 
-      {/* Main content */}
-      <main className="flex-1 flex flex-col">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto p-4">
         {activeTab === "cases" ? (
           <ActiveCasesPage />
         ) : (
           <>
-            {/* Header */}
-            <header className="h-16 bg-card/50 border-b border-border/30 flex items-center justify-between px-6">
-              <div>
-                <h2 className="font-serif text-xl text-foreground">Case Upload & Analysis</h2>
-                <p className="text-xs text-muted-foreground">Submit official case documents for judicial timeline monitoring</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div className="w-2 h-2 rounded-full bg-[hsl(var(--status-success))]" />
-                  System Active
-                </div>
-              </div>
-            </header>
-
-        {/* Content area */}
-        <div className="flex-1 p-6 overflow-auto">
-          {/* Operational Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <motion.div
-              className="glass-panel p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm">Active Cases</p>
-                  <p className="text-3xl font-serif text-primary mt-1">2,847</p>
-                  <p className="text-xs text-muted-foreground mt-2">Cases currently under monitoring</p>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-primary" />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="glass-panel p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm">On Schedule</p>
-                  <p className="text-3xl font-serif text-[hsl(var(--status-success))] mt-1">1,923</p>
-                  <p className="text-xs text-muted-foreground mt-2">Proceeding within defined timelines</p>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-[hsl(var(--status-success))]/10 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[hsl(var(--status-success))]" />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="glass-panel p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm">Completed Cases</p>
-                  <p className="text-3xl font-serif text-[hsl(var(--status-success))] mt-1">4,521</p>
-                  <p className="text-xs text-muted-foreground mt-2">Cases successfully resolved</p>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-[hsl(var(--status-success))]/10 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[hsl(var(--status-success))]" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Upload section */}
-          <motion.div
-            className="glass-panel p-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Scale className="w-6 h-6 text-primary" />
-              <h3 className="font-serif text-xl text-foreground">Upload Case Documents</h3>
-            </div>
-            
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              accept=".pdf"
-              className="hidden"
-            />
-            
-            <div 
-              onClick={handleUploadClick}
-              className={`border-2 border-dashed rounded-lg p-12 text-center transition-all duration-300 cursor-pointer ${
-                selectedFile 
-                  ? "border-primary/50 bg-primary/5" 
-                  : "border-border/50 hover:border-primary/30 hover:bg-muted/20"
-              }`}
-            >
-              {selectedFile ? (
-                <>
-                  <FileText className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <p className="text-foreground font-medium mb-1">{selectedFile.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB — Click to change file
-                  </p>
-                </>
-              ) : (
-                <>
-                  <Scale className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-foreground mb-2">Select official case documents from your device to initiate monitoring</p>
-                  <p className="text-sm text-primary/80">Supported format: PDF only</p>
-                </>
-              )}
+            {/* Breadcrumb */}
+            <div className="text-sm text-muted-foreground mb-4">
+              Home &gt; Case Upload &gt; Submit New Case
             </div>
 
-            {/* Security Notice */}
-            <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
-              <Shield className="w-3.5 h-3.5 text-[hsl(43,59%,54%)]" />
-              <span>All documents are securely processed and accessible only to authorized judicial personnel.</span>
+            {/* Statistics Section */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="govt-stat-tile">
+                <p className="text-sm text-muted-foreground mb-1">Active Cases</p>
+                <p className="text-2xl font-bold text-foreground">2,847</p>
+                <p className="text-xs text-muted-foreground mt-1">Currently under monitoring</p>
+              </div>
+              <div className="govt-stat-tile">
+                <p className="text-sm text-muted-foreground mb-1">Pending Cases</p>
+                <p className="text-2xl font-bold text-status-warning">612</p>
+                <p className="text-xs text-muted-foreground mt-1">Awaiting next hearing</p>
+              </div>
+              <div className="govt-stat-tile">
+                <p className="text-sm text-muted-foreground mb-1">Disposed Cases</p>
+                <p className="text-2xl font-bold text-status-success">4,521</p>
+                <p className="text-xs text-muted-foreground mt-1">Successfully resolved</p>
+              </div>
+              <div className="govt-stat-tile">
+                <p className="text-sm text-muted-foreground mb-1">Delayed Cases</p>
+                <p className="text-2xl font-bold text-status-danger">89</p>
+                <p className="text-xs text-muted-foreground mt-1">Exceeding timelines</p>
+              </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm text-foreground mb-2">Case Category</label>
-                <select 
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+            {/* Upload Section */}
+            <div className="govt-section mb-6">
+              <h2 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+                Upload Case Documents
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* File Upload */}
+                <div>
+                  <label className="govt-label">Select Case Document (PDF only)</label>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept=".pdf"
+                    className="hidden"
+                  />
+                  <div 
+                    onClick={handleUploadClick}
+                    className={`border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
+                      selectedFile 
+                        ? "border-status-success bg-status-success/5" 
+                        : "border-border hover:border-primary hover:bg-muted/50"
+                    }`}
+                  >
+                    {selectedFile ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-status-success" />
+                        <span className="text-sm">{selectedFile.name}</span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-sm text-muted-foreground">Click to select PDF file</p>
+                        <p className="text-xs text-muted-foreground mt-1">Maximum file size: 10MB</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Form Fields */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="govt-label">Select Case Category</label>
+                    <select 
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="govt-select"
+                    >
+                      <option value="">-- Select Category --</option>
+                      <option value="civil">Civil Dispute</option>
+                      <option value="criminal">Criminal Case</option>
+                      <option value="family">Family Court</option>
+                      <option value="commercial">Commercial Litigation</option>
+                      <option value="constitutional">Constitutional Matter</option>
+                      <option value="taxation">Taxation</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="govt-label">Select Priority Level</label>
+                    <select 
+                      value={priority}
+                      onChange={(e) => setPriority(e.target.value)}
+                      className="govt-select"
+                    >
+                      <option value="">-- Select Priority --</option>
+                      <option value="standard">Standard</option>
+                      <option value="high">High Priority</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 mt-6 pt-4 border-t border-border">
+                <button 
+                  onClick={handleAnalyze}
+                  disabled={!isFormValid || isAnalyzing}
+                  className="govt-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <option value="">Select Category</option>
-                  <option value="civil">Civil Dispute</option>
-                  <option value="criminal">Criminal Case</option>
-                  <option value="family">Family Court</option>
-                  <option value="commercial">Commercial Litigation</option>
-                  <option value="constitutional">Constitutional Matter</option>
-                  <option value="taxation">Taxation</option>
-                </select>
-                <p className="text-xs text-muted-foreground mt-2">Used to estimate standard judicial timelines</p>
-              </div>
-              <div>
-                <label className="block text-sm text-foreground mb-2">Priority Level</label>
-                <select 
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
-                  className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                  {isAnalyzing ? "Processing..." : "Submit"}
+                </button>
+                <button 
+                  onClick={handleAnalyze}
+                  disabled={!isFormValid || isAnalyzing}
+                  className="govt-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <option value="">Select Priority</option>
-                  <option value="standard">Standard</option>
-                  <option value="high">High Priority</option>
-                  <option value="urgent">Urgent</option>
-                </select>
-                <p className="text-xs text-muted-foreground mt-2">Affects monitoring alerts, not judicial decisions</p>
+                  Generate Case Timeline
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedFile(null);
+                    setCategory("");
+                    setPriority("");
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                  }}
+                  className="govt-btn-secondary"
+                >
+                  Clear Form
+                </button>
+              </div>
+
+              {/* Notice */}
+              <div className="flex items-start gap-2 mt-4 p-3 bg-muted border border-border">
+                <AlertCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-muted-foreground">
+                  All documents are processed securely and accessible only to authorized judicial personnel. 
+                  Ensure the uploaded document is an official court filing.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 flex justify-end gap-4">
-              <button 
-                onClick={() => {
-                  setSelectedFile(null);
-                  setCategory("");
-                  setPriority("");
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
-                  }
-                }}
-                className="px-6 py-3 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Clear Form
-              </button>
-              <button 
-                onClick={handleAnalyze}
-                disabled={!isFormValid || isAnalyzing}
-                className={`px-6 py-3 font-medium rounded-lg flex items-center gap-2 transition-all duration-300 ${
-                  isFormValid && !isAnalyzing
-                    ? "bg-[hsl(var(--btn-judicial))] text-[hsl(var(--btn-judicial-foreground))] hover:bg-[hsl(var(--btn-judicial-hover))] hover:shadow-[var(--glow-gold)]"
-                    : "bg-[hsl(var(--btn-judicial-disabled))] text-muted-foreground cursor-not-allowed"
-                }`}
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  "Generate Monitoring Timeline"
-                )}
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Recent activity */}
-          <motion.div
-            className="glass-panel p-8 mt-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <h3 className="font-serif text-xl text-foreground mb-6">Recent Case Activity</h3>
-            
-            <div className="space-y-4">
-              {recentActivity.map((item, index) => (
-                <div key={index} className="flex items-center justify-between py-4 border-b border-border/30 last:border-0">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-2.5 h-2.5 rounded-full ${
-                      item.statusType === "success" ? "bg-[hsl(var(--status-success))]" :
-                      item.statusType === "warning" ? "bg-[hsl(var(--status-warning))]" :
-                      "bg-[hsl(var(--status-danger))]"
-                    }`} />
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <p className="text-foreground font-medium">{item.id}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                          item.statusType === "success" 
-                            ? "bg-[hsl(var(--status-success))]/10 text-[hsl(var(--status-success))]" 
-                            : item.statusType === "warning"
-                            ? "bg-[hsl(var(--status-warning))]/10 text-[hsl(var(--status-warning))]"
-                            : "bg-[hsl(var(--status-danger))]/10 text-[hsl(var(--status-danger))]"
+            {/* Recent Cases Table */}
+            <div className="govt-section">
+              <h2 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border">
+                Recent Case Filings
+              </h2>
+              
+              <table className="govt-table">
+                <thead>
+                  <tr>
+                    <th>Case Number</th>
+                    <th>Case Type</th>
+                    <th>Court</th>
+                    <th>Filing Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentCases.map((item, index) => (
+                    <tr key={index}>
+                      <td className="font-medium">{item.id}</td>
+                      <td>{item.type}</td>
+                      <td>{item.court}</td>
+                      <td>{item.date}</td>
+                      <td>
+                        <span className={`px-2 py-0.5 text-xs ${
+                          item.status === "On Schedule" 
+                            ? "bg-status-success/10 text-status-success" 
+                            : item.status === "Pending"
+                            ? "bg-status-warning/10 text-status-warning"
+                            : item.status === "Disposed"
+                            ? "bg-muted text-muted-foreground"
+                            : "bg-status-danger/10 text-status-danger"
                         }`}>
                           {item.status}
                         </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">{item.action}</p>
-                    </div>
-                  </div>
-                  <span className="text-xs text-muted-foreground/70">{item.time}</span>
-                </div>
-              ))}
+                      </td>
+                      <td>
+                        <button className="text-primary hover:underline text-sm">
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="flex justify-end mt-4">
+                <button className="text-primary hover:underline text-sm">
+                  View All Cases &rarr;
+                </button>
+              </div>
             </div>
-          </motion.div>
-        </div>
           </>
         )}
       </main>
-    </motion.div>
+
+      {/* Footer */}
+      <footer className="bg-muted border-t border-border mt-8 py-4">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center text-xs text-muted-foreground">
+            <div>
+              <p>© 2024 Department of Justice, Government of India. All Rights Reserved.</p>
+              <p className="mt-1">Designed and Developed by National Informatics Centre (NIC)</p>
+            </div>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-foreground">Terms of Use</a>
+              <a href="#" className="hover:text-foreground">Privacy Policy</a>
+              <a href="#" className="hover:text-foreground">Disclaimer</a>
+              <a href="#" className="hover:text-foreground">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 
