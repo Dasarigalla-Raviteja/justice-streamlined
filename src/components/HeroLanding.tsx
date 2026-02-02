@@ -12,9 +12,10 @@ const HeroLanding = ({ onEnter }: HeroLandingProps) => {
     >
       {/* Background Image - Full Screen */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-contain bg-center bg-no-repeat"
         style={{ 
           backgroundImage: `url(${scalesHeroImg})`,
+          backgroundColor: '#1a1208',
         }}
       />
       
