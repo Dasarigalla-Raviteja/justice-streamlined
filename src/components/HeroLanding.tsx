@@ -11,13 +11,14 @@ const HeroLanding = ({ onEnter }: HeroLandingProps) => {
       onClick={onEnter}
     >
       {/* Background Image - Full Screen */}
-      <div 
-        className="absolute inset-0 bg-contain bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: `url(${scalesHeroImg})`,
-          backgroundColor: '#1a1208',
-        }}
+      <img 
+        src={scalesHeroImg}
+        alt="Scales of Justice"
+        className="absolute inset-0 w-full h-full object-cover object-top"
       />
+      
+      {/* Dark background fallback */}
+      <div className="absolute inset-0 -z-10 bg-[#1a1208]" />
       
       {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-black/30" />
