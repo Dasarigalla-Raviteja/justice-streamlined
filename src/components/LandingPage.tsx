@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Scale, Shield, FileText, Clock, ArrowRight } from "lucide-react";
 import LoginGate from "./LoginGate";
+import HeroLanding from "./HeroLanding";
 import justiceScalesImg from "@/assets/justice-scales.png";
 
 const LandingPage = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const [showHero, setShowHero] = useState(true);
+
+  if (showHero) {
+    return <HeroLanding onEnter={() => setShowHero(false)} />;
+  }
 
   if (showLogin) {
     return <LoginGate />;
