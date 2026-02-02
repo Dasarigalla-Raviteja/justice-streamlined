@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Scale, Shield, FileText, Clock, ArrowRight } from "lucide-react";
 import LoginGate from "./LoginGate";
+import justiceScalesImg from "@/assets/justice-scales.png";
 
 const LandingPage = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -70,8 +71,12 @@ const LandingPage = () => {
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-            <div className="hidden md:block w-48 h-32 bg-muted border border-border flex items-center justify-center">
-              <Scale className="w-16 h-16 text-muted-foreground/30" />
+            <div className="hidden md:block w-48 h-32 bg-muted border border-border overflow-hidden">
+              <img 
+                src={justiceScalesImg} 
+                alt="Scales of Justice" 
+                className="w-full h-full object-contain"
+              />
             </div>
           </div>
         </div>
