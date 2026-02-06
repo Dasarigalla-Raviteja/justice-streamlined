@@ -1,7 +1,7 @@
-import LandingPage from "@/components/LandingPage";
+import LoginGate from "@/components/LoginGate";
 
 const Index = () => {
-  return <LandingPage />;
+  return <LoginGate />;
 };
 
 export default Index;
