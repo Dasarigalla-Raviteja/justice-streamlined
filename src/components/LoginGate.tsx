@@ -135,28 +135,8 @@ const LoginGate = () => {
             </ul>
           </div>
 
-          {/* Help Section */}
-          <div className="mt-4 p-3 bg-muted border border-border text-center">
-            <p className="text-xs text-muted-foreground">
-              For technical assistance, contact NIC Helpdesk: 1800-111-555 (Toll Free)
-            </p>
-          </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-muted border-t border-border mt-12 py-4 fixed bottom-0 left-0 right-0">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <p>© 2024 Department of Justice, Government of India. All Rights Reserved.</p>
-            <div className="flex gap-4">
-              <a href="#" className="hover:text-foreground">Terms of Use</a>
-              <a href="#" className="hover:text-foreground">Privacy Policy</a>
-              <a href="#" className="hover:text-foreground">Contact Us</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
