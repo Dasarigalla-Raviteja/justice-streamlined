@@ -117,9 +117,8 @@ const LoginGate = () => {
                 </button>
               </div>
 
-              <div className="flex gap-4 pt-2 text-sm">
+              <div className="pt-2 text-sm">
                 <a href="#" className="text-primary hover:underline">Forgot Password?</a>
-                <a href="#" className="text-primary hover:underline">Register New User</a>
               </div>
             </form>
           </div>
