@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FileText, Clock, BarChart3, Users, Settings, LogOut, Upload, AlertCircle, CheckCircle, Home } from "lucide-react";
 import ActiveCasesPage from "./ActiveCasesPage";
 
@@ -13,7 +13,20 @@ const DashboardApp = ({ onExit }: DashboardAppProps) => {
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  };
   const navItems = [
     { id: "home", label: "Home" },
     { id: "upload", label: "Case Upload" },
@@ -67,11 +80,13 @@ const DashboardApp = ({ onExit }: DashboardAppProps) => {
                 <p className="text-xs text-primary-foreground/80">Government of India | Department of Justice</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-primary-foreground/80">Welcome, Administrator</span>
+            <div className="flex items-center gap-4 text-sm text-primary-foreground/80">
+              <span>{formatDate(currentTime)}</span>
+              <span className="font-mono">{formatTime(currentTime)}</span>
+              <span>Welcome, Administrator</span>
               <button 
                 onClick={onExit}
-                className="flex items-center gap-1 text-sm text-primary-foreground/80 hover:text-primary-foreground"
+                className="flex items-center gap-1 hover:text-primary-foreground"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
